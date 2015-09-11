@@ -8,18 +8,35 @@ router.use(function(req, res, next) {
 });
 
 router.route('/')
+
+   // Register a new User or look up a user's _id using their Facebook ID
    .post(function(req, res) {
-      var user = new User();
-      user.name = req.body.name;
-
-      user.save(function(err) {
-         if (err) {
-            res.send(err);
+      console.log(req.body.name);
+      // Search for matching Facebook user id
+      var condition = {
+         fbUID: req.body.fbUID
+      };
+      // Create if not already exist
+      var update = {
+         $set: {
+            name: req.body.name
+         },
+         $setOnInsert: {
+            fbUID: req.body.fbUID
          }
-         res.send('user added');
+      };
+      User.findOneAndUpdate(condition, update, {new: true, upsert: true, select: '_id'}, function(err, user) {
+         if (err) {
+            res.setStatus(400).send(err);
+         } else if (!user) {
+            res.setStatus(400).send('Something went wrong');
+         } else { // Send back object id
+            res.send(user);
+         }
       });
-
    })
+
+   // TODO: probably remove
    .get(function(req, res) {
       User.find(function(err, users) {
          if (err) {
@@ -28,6 +45,7 @@ router.route('/')
          res.json(users);
       });
    });
+
 
 router.route('/:userId')
    .get(function(req, res) {

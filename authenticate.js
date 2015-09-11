@@ -14,6 +14,7 @@ function fbUserTokenAuthenticate(appsecret) {
       // Check if authorization header was found
       if (!header) {
          res.status(400).send('Authentication header required');
+         return;
       }
       var parts = header.split(/:/);
       var token = parts[0]; // Get user access token

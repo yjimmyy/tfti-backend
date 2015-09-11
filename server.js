@@ -15,6 +15,7 @@ var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+//TODO: reset app secret
 app.use(authenticate.fbUserTokenAuthenticate('77b0f84cb6d64bda2c1428e546eaf615'));
 
 // routes

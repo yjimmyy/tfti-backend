@@ -42,6 +42,7 @@ router.route('/')
 
 // Access specific Spot
 router.route('/:spotId')
+
    .get(function(req, res) {
       Spot.findById(req.params.spotId, function(err, spot) {
          if (err) {
