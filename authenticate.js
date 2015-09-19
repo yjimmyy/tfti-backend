@@ -31,7 +31,7 @@ function fbUserTokenAuthenticate(appsecret) {
       var options = {
          hostname: 'graph.facebook.com',
          port: 443,
-         path: '/v2.4/me?access_token=' + token + '&appsecret_proof=' + appsecret_proof,
+         path: '/v2.4/me?fields=id%2Cname&access_token=' + token + '&appsecret_proof=' + appsecret_proof,
          method: 'GET'
       };
 
@@ -50,6 +50,9 @@ function fbUserTokenAuthenticate(appsecret) {
 
             // If user id matches then user is authenticated
             if (fbres.statusCode === 200 && providedUserId === returnedUserId) {
+               req.body.userName = JSON.parse(str).name;
+               console.log(req.body.userName);
+               req.body.userFbId = returnedUserId; // used to get user's objectid later
                console.log('Authentication success');
                next();
             } else { // TODO make responses more consistent

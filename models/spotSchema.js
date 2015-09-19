@@ -7,7 +7,8 @@ var SpotSchema = new mongoose.Schema({
    radius: {type: Number, default: 20},
    members: [{
       user_id: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-      atSpot: {type: Boolean, default: false}
+      lastPing: {type: Date, default: Date.now}
+      //atSpot: {type: Boolean, default: false}
    }]
 });
 

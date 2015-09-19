@@ -14,20 +14,21 @@ router.route('/')
       console.log(req.body.name);
       // Search for matching Facebook user id
       var condition = {
-         fbUID: req.body.fbUID
+         fbUID: req.body.userFbId
       };
       // Create if not already exist
       var update = {
          $set: {
-            name: req.body.name
+            name: req.body.userName
          },
          $setOnInsert: {
-            fbUID: req.body.fbUID
+            fbUID: req.body.userFbId
          }
       };
       User.findOneAndUpdate(condition, update, {new: true, upsert: true, select: '_id'}, function(err, user) {
          if (err) {
-            res.setStatus(400).send(err);
+            console.log('error');
+            res.setStatus(400);
          } else if (!user) {
             res.setStatus(400).send('Something went wrong');
          } else { // Send back object id
