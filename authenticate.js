@@ -53,6 +53,7 @@ function fbUserTokenAuthenticate(appsecret) {
                req.body.userName = JSON.parse(str).name;
                console.log(req.body.userName);
                req.body.userFbId = returnedUserId; // used to get user's objectid later
+               console.log(returnedUserId);
                console.log('Authentication success');
                next();
             } else { // TODO make responses more consistent

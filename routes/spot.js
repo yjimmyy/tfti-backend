@@ -3,6 +3,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Spot = require('../models/spotSchema'); // spotSchema
 var User = require('../models/userSchema');
+var shortId = require('short-mongo-id'); // to generate shorter id
 
 router.use(function(req, res, next) {
    console.log('spot req received');
@@ -47,9 +48,18 @@ router.route('/')
             res.send(err);
          } else {
             console.log(product);
-            res.json({
-               "success": true,
-               "objectId": product._id
+            var conditions = {
+               _id: product._id
+            };
+            var update = {
+               shortId: shortId(product._id)
+            };
+            Spot.update(conditions, update, function(err, spot) {
+               console.log(shortId(product._id));
+               res.json({
+                  "success": true,
+                  "objectId": shortId(product._id)
+               });
             });
          }
       });
@@ -75,7 +85,10 @@ router.route('/')
 router.route('/:spotId')
 
    .get(function(req, res) {
-      Spot.findById(req.params.spotId, function(err, spot) {
+      var condition = {
+         shortId: req.params.spotId
+      }
+      Spot.findOne(condition, function(err, spot) {
          if (err) {
             res.status(400).send(err);
          }
@@ -84,7 +97,10 @@ router.route('/:spotId')
    })
 
    .put(function(req, res) {
-      Spot.findById(req.params.spotId, function(err, spot) {
+      var condition = {
+         shortId: req.params.spotId
+      }
+      Spot.findOne(condition, function(err, spot) {
          if (err) {
             res.send(err);
          }
@@ -93,14 +109,14 @@ router.route('/:spotId')
             if (err) {
                res.send(err);
             }
-            res.send('added');
+            res.send('updated');
          });
       });
    })
 
    .delete(function(req, res) {
       Spot.remove({
-         _id: req.params.spotId
+         shortId: req.params.spotId
       }, function(err, bear) {
          if (err) {
             res.send(err);
@@ -116,6 +132,7 @@ router.route('/:spotId/member')
    // Adds a user as a member of the group if not already a member
    .post(function(req, res) {
       User.find({_id: req.body.user_id}, function(err, spot) {
+         console.log(req.body.userObjectId);
          if (err) {
             res.send("error");
             return;
@@ -124,7 +141,8 @@ router.route('/:spotId/member')
             return;
          }
          var condition = {
-            _id: req.params.spotId,
+            //_id: req.params.spotId,
+            'shortId': req.params.shortId,
             'members.user_id': {$ne: req.body.userObjectId}
          };
          var update = {
@@ -137,10 +155,13 @@ router.route('/:spotId/member')
          };
          Spot.findOneAndUpdate(condition, update, {safe: true}, function(err, spot) {
             if (err) {
+               console.log('a');
                res.status(400).send(err);
             } else if (!spot) {
+               console.log('b');
                res.sendStatus(404); // error if spot not found or user is already a member
             } else {
+               console.log('c');
                res.status(200).json({
                   "success": true
                });
@@ -151,7 +172,11 @@ router.route('/:spotId/member')
 
    // Gets all members of the group
    .get(function(req, res) {
-      Spot.findById(req.params.spotId, function(err, spot) {
+      console.log('aaaa');
+      var condition = {
+         shortId: req.params.spotId
+      };
+      Spot.findOne(condition, function(err, spot) {
          if (err) {
             res.status(400).send(err);
          } else if (!spot) {
@@ -164,7 +189,7 @@ router.route('/:spotId/member')
 
    .delete(function(req, res) {
       var condition = {
-         _id: req.params.spotId
+         'shortId': req.params.spotId
       };
       var update = {
          $pull: {

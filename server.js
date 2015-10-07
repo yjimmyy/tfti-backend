@@ -6,8 +6,11 @@ var crypto = require('crypto');
 var https = require('https');
 var authenticate = require('./authenticate');
 
+// TODO use https
+
 // MongoDB
-mongoose.connect('mongodb://localhost/tfti');
+//mongoose.connect('mongodb://localhost/tfti');
+mongoose.connect('cant make public');
 
 var app = express();
 
@@ -16,11 +19,12 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 //TODO: reset app secret
-app.use(authenticate.fbUserTokenAuthenticate('77b0f84cb6d64bda2c1428e546eaf615'));
+app.use(authenticate.fbUserTokenAuthenticate('cant make public'));
 
 // routes
 app.use('/api', require('./routes/api'));
 
 // start server
-app.listen(3000);
-console.log('working on 3000');
+var port = 8080;
+app.listen(port);
+console.log('working on ' + port);

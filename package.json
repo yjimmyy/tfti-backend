@@ -1,16 +1,27 @@
 {
-  "name": "tfti",
+  "name": "tfti-backend",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "mongoose": "^4.1.3",
+    "express": "^4.13.3",
+    "short-mongo-id": "latest"
+  },
+  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yjimmyy/tfti-backend.git"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "body-parser": "^1.13.3",
-    "express": "^4.13.3",
-    "mongoose": "^4.1.3",
-  }
+  "bugs": {
+    "url": "https://github.com/yjimmyy/tfti-backend/issues"
+  },
+  "homepage": "https://github.com/yjimmyy/tfti-backend#readme"
 }
