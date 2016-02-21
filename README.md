@@ -1,4 +1,4 @@
-# TFTI Node.js web service using MongoDB database
+# TFTI Node.js web service using MongoDB
 
 *Ignore the most recent comment. This actually does actually work.
 
